@@ -16,7 +16,7 @@ echo -e "Usage:
 	return 0   
 }
 set_vim(){
-	grep "set ts=4" /etc/vim/vimrc
+	grep "set ts=4" /etc/vim/vimrc >/dev/null 2>&1
 	
 	if [[ $? -ne 0 ]]; then
 		echo "set ts=4" >> /etc/vim/vimrc
@@ -48,7 +48,7 @@ set_zsh(){
 ####################################### target #################################################
 
 install_environment(){
-	grep "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" /etc/apt/sources.list
+	grep "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" /etc/apt/sources.list >/dev/null 2>&1
 
 	if [[ $? -ne 0 ]]; then
     	echo "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" >> /etc/apt/sources.list
@@ -62,7 +62,7 @@ install_environment(){
 install_mybin(){
 	echo "===================================start install bin==============================="
 	cd $path
-	apt install astyle
+	apt install astyle 
 	if [[ $? -ne 0 ]]; then
 		return 1
 	fi
@@ -78,7 +78,7 @@ install_mybin(){
     fi
 
 	cp -rf mybin /usr/
-	grep "/usr/mybin" $HOME/.bashrc
+	grep "/usr/mybin" $HOME/.bashrc >/dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
 		echo 'export PATH="/usr/mybin:$PATH"' >> $HOME/.bashrc
 		echo 'source /usr/mybin/.jump' >> $HOME/.bashrc
@@ -132,18 +132,18 @@ install_zsh(){
 
 install_theme(){
 	echo "===================================start install theme==============================="
-	apt install gnome-tweak-tool >/dev/null 2>&1
+	apt install gnome-tweak-tool
 	if [[ $? -ne 0 ]]; then
         return 1
     fi
-	apt install gnome-shell-extensions >/dev/null 2>&1
+	apt install gnome-shell-extensions
 	if [[ $? -ne 0 ]]; then
         return 1
     fi
 
-	cd $path/package/vimix && tar -xvf vimix-gtk-themes-2020-02-24.tar.gz && tar -xvf $path/package/vimix/vimix-icon-theme-2020-07-10.tar.gz >/dev/null 2>&1
-	cd $path/package/vimix/vimix-gtk-themes-2020-02-24 && ./install.sh >/dev/null 2>&1
-	cd $path/package/vimix/vimix-icon-theme-2020-07-10 && ./install.sh >/dev/null 2>&1
+	cd $path/package/vimix && tar -xvf vimix-gtk-themes-2020-02-24.tar.gz >/dev/null 2>&1 && tar -xvf $path/package/vimix/vimix-icon-theme-2020-07-10.tar.gz >/dev/null 2>&1
+	cd $path/package/vimix/vimix-gtk-themes-2020-02-24 && ./install.sh >/dev/null
+	cd $path/package/vimix/vimix-icon-theme-2020-07-10 && ./install.sh >/dev/null
 	#cd $path/package/vimix/dash-to-dock && make clean && make && make install
 	cp $path/package/dash-to-dock@micxgx.gmail.com $HOME/.local/share/gnome-shell/extensions/ -rf
 	rm -rf $path/package/vimix/vimix-gtk-themes-2020-02-24 $path/package/vimix/vimix-icon-theme-2020-07-10
