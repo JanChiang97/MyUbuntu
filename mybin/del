@@ -1,0 +1,31 @@
+#!/bin/bash
+
+MAX=100
+if [ -z $1 ]; then
+	echo "Usage:
+	del [file(s)] ---- delete file(s)
+	del clean     ---- clean the trash can"
+	exit 1
+fi
+
+if [ $1 == "clean" ]; then
+	echo "clean the /tmp/trash"
+	rm -rf /tmp/trash/*
+	exit 0
+fi
+
+
+#path=$(pwd)
+name=$(date +%H%M_%Y%m%d)
+
+if [ ! -d /tmp/trash/$name ]; then
+	mkdir -p /tmp/trash/$name 
+fi
+
+if [ `ls /tmp/trash | wc -l` -gt $MAX ]; then
+	echo "warning:trash can is full and will be cleaned!"
+	rm -rf /tmp/trash/*
+	mv -f -t /tmp/trash/$name $@
+else
+	mv -f -t /tmp/trash/$name $@ 
+fi

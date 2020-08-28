@@ -1,2 +1,7 @@
-# ubuntu_environment
-install some package and some shell for work
+# MyUbuntu
+#install some package and some shell for work
+
+
+install :
+	cd {...}/MyUbuntu 
+	sudo ./install
