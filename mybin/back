@@ -1,0 +1,14 @@
+#!/usr/mybin/bash
+
+
+TRASHCAN=$HOME/.tmp/trash
+BACKFILE=$TRASHCAN/.backfile
+SIZEFILE=$TRASHCAN/.size
+RECORD=$TRASHCAN/.record
+bash $BACKFILE  
+if [[ $? != 0 ]]; then
+	echo -e "\033[31mERROR\033[0m:Some file(s) retrieval failed! Please view the \033[32m$RECORD \033[0mfile ! Maybe you can found them in \033[32m$TRASHCAN\033[0m"
+	exit 1
+fi
+
+du -m --max-depth=0 $TRASHCAN | tr -d "$TRASHCAN" > $SIZEFILE 2>/dev/null &

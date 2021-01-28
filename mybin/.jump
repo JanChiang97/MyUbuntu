@@ -47,6 +47,47 @@ function j () {
 		false
 	fi
 }
+function jo() {
+    if [[ ${1} == -* ]] && [[ ${1} != "--" ]]; then
+        autojump ${@}
+        return
+    fi
 
+    #setopt localoptions noautonamedirs
+    local output="$(autojump ${@})"
+    if [[ -d "${output}" ]]; then
+        case ${OSTYPE} in
+            linux*)
+                xdg-open "${output}"
+                ;;
+            darwin*)
+                open "${output}"
+                ;;
+            cygwin)
+                cygstart "" $(cygpath -w -a ${output})
+                ;;
+            *)
+                echo "Unknown operating system: ${OSTYPE}" 1>&2
+                ;;
+        esac
+    else
+        echo "autojump: directory '${@}' not found"
+        echo "\n${output}\n"
+        echo "Try \`autojump --help\` for more information."
+        false
+    fi
+}
+function jclean(){
+	if [[ -f "$HOME/.local/share/autojump/autojump.txt" && `sed -n '$=' $HOME/.local/share/autojump/autojump.txt` -gt 500 ]]; then
+		echo "clean $HOME/.local/share/autojump/autojump.txt"
+		tail $HOME/.local/share/autojump/autojump.txt -n 200 > $HOME/.local/share/autojump/autojump.txt.tmp
+		mv $HOME/.local/share/autojump/autojump.txt.tmp $HOME/.local/share/autojump/autojump.txt
+	fi
+}
+
+export CSCOPE_DB=$HOME/.cscope/cscope.out
+j --purge > /dev/null 2>&1
+jclean
 export  jump
 export  j
+export	jo

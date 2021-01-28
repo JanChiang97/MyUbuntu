@@ -106,11 +106,13 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-#clean .zsh_history and keep line:5000
-if [[ -f $HOME/.zsh_history && `sed -n "$=" $HOME/.zsh_history` -gt 5000 ]]; then
-	tail $HOME/.zsh_history -n 5000 > $HOME/.zsh_history
+#clean .zsh_history and keep line:2000
+if [[ -f $HOME/.zsh_history && `sed -n '$=' $HOME/.zsh_history` -gt 2000 ]]; then
+	tail $HOME/.zsh_history -n 1000 > $HOME/.zsh_history.tmp
+	mv $HOME/.zsh_history.tmp $HOME/.zsh_history
 fi
 
 . /usr/share/autojump/autojump.sh
 source $ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+alias sudo='sudo env PATH=$PATH'

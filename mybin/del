@@ -1,31 +1,179 @@
 #!/bin/bash
 
-MAX=100
-if [ -z $1 ]; then
-	echo "Usage:
-	del [file(s)] ---- delete file(s)
-	del clean     ---- clean the trash can"
-	exit 1
+TRASHCAN=$HOME/.tmp/trash
+
+if [ ! -d $TRASHCAN ]; then
+	mkdir -p $TRASHCAN
 fi
 
-if [ $1 == "clean" ]; then
-	echo "clean the /tmp/trash"
-	rm -rf /tmp/trash/*
-	exit 0
+BACKFILE=$TRASHCAN/.backfile
+if [[ ! -f $BACKFILE ]]; then 
+	touch $BACKFILE
+	chmod 777 $BACKFILE
+fi
+RECORD=$TRASHCAN/.record
+if [[ ! -f $RECORD ]]; then
+    touch $RECORD
+    chmod 777 $RECORD
 fi
 
 
-#path=$(pwd)
-name=$(date +%H%M_%Y%m%d)
+SIZEFILE=$TRASHCAN/.size
 
-if [ ! -d /tmp/trash/$name ]; then
-	mkdir -p /tmp/trash/$name 
+if [[ `whoami` == "root" ]]; then
+	chmod 777 $TRASHCAN/.*
 fi
 
-if [ `ls /tmp/trash | wc -l` -gt $MAX ]; then
-	echo "warning:trash can is full and will be cleaned!"
-	rm -rf /tmp/trash/*
-	mv -f -t /tmp/trash/$name $@
-else
-	mv -f -t /tmp/trash/$name $@ 
+
+MAXDIR=100 #100 dir
+DIR=`ls $TRASHCAN | wc -l`
+MAXSIZE=102400 #100G
+
+if [ -f $SIZEFILE ]; then
+	SIZE=`cat $SIZEFILE`
 fi
+
+PWD=$(pwd)
+NAME=$(date +%m-%d-%H-%M)
+
+word(){
+	if [[ `whoami` == "Jan" || `whoami` == "jan" ]]; then	
+		echo -e "\033[31mYou Are So Fool!!!\033[0m\n"
+	else
+		echo -e "\033[31mYou Are So Cute, But You Can Not Do That !!!\033[0m\n"
+	fi
+}
+print_usage()
+{
+	echo -e "Usage:
+    del [file(s)]   ---- delete file(s)
+    del -c      ---- clean the trash can
+    del -s [key]    ---- show or find [key] in ~/.tmp/trash
+    del -b      ---- Be equivalent to \033[32mback\033[0m: cancel delete
+    del -r      ---- Show record deletion
+
+    \033[32mNOTE\033[0m:You can cancel the last delete by use \033[32mback\033[0m
+    You can see the record deletion by looking at the \033[32m$RECORD\033[0m file, and found those files in $TRASHCAN"
+}
+
+show(){
+	cd $TRASHCAN && echo -e "\033[33mIn $(pwd)/\033[0m" 
+	if [[ -z "$1" ]]; then
+		tree -t -L 2 
+	else
+		find $TRASHCAN/ -mindepth 2 -maxdepth 2 -name "*$1*" 
+#		grep "$1" $RECORD  
+	fi
+	echo -e "\n================================="	
+	echo "TOTAL=$DIR"
+	echo "MAX=$MAXDIR"
+	echo "SIZE=${SIZE}M"
+	echo "MAXSIZE=${MAXSIZE}M"
+}
+
+back_order()
+{
+	tmp=`echo $3 | awk -F "/" '{print $NF}'`
+
+	echo "mv $2/$tmp $3" >> $BACKFILE
+	echo "if [[ \$? == 0 ]]; then echo \"In $1,found $3\"; else exit 1; fi" >> $BACKFILE
+	echo -e "In $1, deleted $3, this file or dir is now at $2/$tmp !" >> $RECORD 
+	echo -e "If you want to find this file, Maybe use: \033[33mcd $1 && mv $2/$tmp $3\033[0m " >> $RECORD
+	echo "">> $RECORD
+}
+
+mydel(){
+	if [[ -f $BACKFILE ]]; then
+		cp $BACKFILE $BACKFILE.bak -rf
+	fi
+
+	if [[ -f $RECORD ]]; then
+		cp $RECORD $RECORD.bak -rf
+	fi
+
+	echo "#!/usr/mybin/bash" > $BACKFILE
+	echo "cd $PWD" >> $BACKFILE
+	echo -e "---------------\033[32m$NAME\033[0m---------------" >> $RECORD
+	for file in $@
+	do
+		back_order $PWD	$TRASHCAN/$NAME $file
+	done
+	echo "rm -rf $TRASHCAN/$NAME" >> $BACKFILE
+
+	mv -f -t $TRASHCAN/$NAME $@
+	if [[ $? != 0 ]]; then
+		back > /dev/null 2>&1
+		rm -rf $TRASHCAN/$NAME
+		if [[ -f $BACKFILE.bak ]]; then
+			mv $BACKFILE.bak $BACKFILE
+			mv $RECORD.bak $RECORD
+		fi
+		exit 1
+	fi
+
+	if [[ -f $BACKFILE.bak ]]; then
+		rm $BACKFILE.bak
+		rm $RECORD.bak
+	fi
+}
+
+check(){
+
+	for lock in $@
+	do
+	if [[ "$lock" == "/" || "$lock" == "/usr/mybin"* || "$lock" == "/bin"* || "$lock" == "/lib"* || "$lock" == "/etc"* ]]; then
+		word
+		exit 1
+	fi
+	if [[ "$PWD" == "/" ]]; then
+		if [[ "$lock" =~ "bin" || "$lock" =~ "usr/mybin" || "$lock" =~ "lib" || "$lock" =~ "etc" ]]; then
+			word
+			exit 1
+		fi
+	fi
+	done
+
+	if [[ -z "$1" || "$1" == "-h" || "--help" == "$1" ]]; then
+		print_usage
+		exit 0
+	elif [ "$1" == "-c" ]; then
+		echo "clean the $TRASHCAN"
+		pkill du
+		rm -rf $TRASHCAN/* &
+		echo 0 > $SIZEFILE
+		echo > $RECORD
+		exit 0
+	elif [ "$1" == "-b" ]; then 
+		back
+		exit 0
+	elif [ "$1" == "-s" ]; then
+		show $2
+		exit 0
+	elif [[ "$1" == "-r" ]]; then
+		cat $RECORD
+		exit 0
+	elif [[ "$1" == "-"* ]]; then
+		echo -e "\033[31mUnknown parameter: $1 \033[0m"
+		print_usage
+		exit 1
+	fi
+
+	if [[ $DIR -gt $MAXDIR || $SIZE -gt $MAXSIZE ]]; then
+		echo -e "\033[31mwarning\033[0m:$TRASHCAN is full and will be cleaned!"
+		rm -rf $TRASHCAN/* &
+		echo 0 > $SIZEFILE
+		exit 0
+	fi
+
+	if [ ! -d $TRASHCAN/$NAME ]; then
+		mkdir -p $TRASHCAN/$NAME
+	else
+		NAME=$(date +%m-%d-%H-%M-%S)
+		mkdir -p $TRASHCAN/$NAME
+	fi
+}
+
+check $@
+mydel $@
+
+du -m --max-depth=0 $TRASHCAN | tr -d "	$TRASHCAN" > $SIZEFILE 2>/dev/null &

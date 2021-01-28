@@ -1,12 +1,12 @@
 #!/bin/sh
 
-path=$(pwd)
+PWD=$(pwd)
 
 astyle --mode=c --style=bsd --indent=spaces=4 --convert-tabs --pad-oper --pad-header --break-blocks  --indent-switches  -w -S -p -D -m0  -M40 --lineend=linux --indent-switches --indent-col1-comments --pad-paren-in --unpad-paren --delete-empty-lines  --align-pointer=name --add-brackets $@
 
 for file in $@
 do
-	if [ -f ${path}/${file}.orig ];then
-		/usr/mybin/del ${path}/${file}.orig
+	if [ -f ${PWD}/${file}.orig ];then
+		rm -f ${PWD}/${file}.orig
 	fi
 done

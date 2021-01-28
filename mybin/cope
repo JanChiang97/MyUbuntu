@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DB_DIR=$HOME/.cscope
+
+ROOT_DIR=`pwd`
+
+if [[ ! -d $DB_DIR ]]; then 
+	mkdir -p $DB_DIR 
+fi
+
+if [[ -z $1 ]]; then
+	echo "生成 $HOME 索引中...完成后请重新打开终端"
+	find $HOME -name "*.c" -o -name "*.h" -o -name "*.cpp" > $DB_DIR/cscope.files
+	cd $DB_DIR && cscope -b && ctags -R $HOME
+else
+	echo "生成 $ROOT_DIR 索引中...完成后请重新打开终端"
+	find $1 -name "*.c" -o -name "*.h" -o -name "*.cpp" > $DB_DIR/cscope.files
+	sed -i "s#^#$ROOT_DIR/&#g" $DB_DIR/cscope.files
+	cd $DB_DIR && cscope -b && ctags -R $ROOT_DIR/$1
+fi
+
+

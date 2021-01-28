@@ -1,0 +1,4 @@
+iptables -A INPUT -p tcp -m tcp --dport 137 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 138 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 139 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 445 -j ACCEPT
