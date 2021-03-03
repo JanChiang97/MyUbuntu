@@ -1,4 +1,14 @@
 #!/bin/bash
+
+#_j () {
+#	cur="${COMP_WORDS[COMP_CWORD]}"
+#	COMPREPLY=()
+#	prev="${COMP_WORDS[COMP_CWORD-1]}"
+#	re=`autojump --complete ${cur[*]}`
+#	if [[ ! -n $re ]]; then	
+#		COMPREPLY=`echo $re | awk -F "/" '{print $NF}'`
+#	fi
+#}
 function jump () {
 	if [[ ${1} == -* ]] && [[ ${1} != "--" ]]
 	then
@@ -88,6 +98,9 @@ function jclean(){
 export CSCOPE_DB=$HOME/.cscope/cscope.out
 j --purge > /dev/null 2>&1
 jclean
+#complete -F _j j
+#complete -F _j jo
+#complete -F _j jump
 export  jump
 export  j
 export	jo

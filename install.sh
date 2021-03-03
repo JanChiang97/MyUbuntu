@@ -43,9 +43,17 @@ set_vim(){
 	fi	
 
 
-	grep "set ts=4" /etc/vim/vimrc >/dev/null 2>&1
+	grep "\" ADD_BY_JAN" /etc/vim/vimrc >/dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
+		echo "\" ADD_BY_JAN" >> /etc/vim/vimrc
 		echo "set ts=4" >> /etc/vim/vimrc
+		echo "set tabstop=8" >> /etc/vim/vimrc
+		echo "set shiftwidth=4" >> /etc/vim/vimrc
+		echo "set softtabstop=4" >> /etc/vim/vimrc
+		echo "set expandtab" >> /etc/vim/vimrc
+		echo "set autoindent" >> /etc/vim/vimrc
+		echo "\" END" >> /etc/vim/vimrc
+		echo "" >> /etc/vim/vimrc
 	fi
 
 	return 0
