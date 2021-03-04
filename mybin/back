@@ -1,4 +1,4 @@
-#!/usr/mybin/bash
+#!/bin/bash
 
 
 TRASHCAN=$HOME/.tmp/trash
