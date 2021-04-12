@@ -108,7 +108,7 @@ install_environment(){
     	apt update
 	fi
 
-	apt install gitk ubuntu-make make amule openjdk-8-jdk lib32ncurses5 bc build-essential curl flex g++-multilib gcc-multilib gnupg gperf imagemagick lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-dev libxml2 lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zip zlib1g-dev python libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev git bison libncurses5-dev:i386 tofrodos python-markdown zlib1g-dev:i386 dpkg-dev libesd0-dev git-core libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev libxml2-utils unzip m4 lib32z-dev ccache samba
+	apt install gitk ubuntu-make make amule bc build-essential curl flex g++-multilib gcc-multilib gnupg gperf rsync zip python git bison tofrodos dpkg-dev git-core unzip m4 samba
 	return $?
 }
 
