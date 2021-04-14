@@ -116,3 +116,4 @@ fi
 source $ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 alias sudo='sudo env PATH=$PATH'
+eval "$(dircolors -b $HOME/.dir_colors)"

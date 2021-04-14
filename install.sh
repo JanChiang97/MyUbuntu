@@ -141,6 +141,8 @@ install_mybin(){
 		echo 'source /usr/mybin/.jump' >> $HOME/.bashrc
 		echo 'source /usr/share/autojump/autojump.sh' >> $HOME/.bashrc
 		echo 'alias sudo="sudo env PATH=$PATH"' >> $HOME/.bashrc
+		echo 'OTHER_WRITABLE 01;34' >> $HOME/.dir_colors
+		echo 'eval "$(dircolors -b $HOME/.dir_colors)"' >> $HOME/.bashrc
     fi
 
 	source $HOME/.bashrc
