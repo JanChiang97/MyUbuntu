@@ -135,14 +135,16 @@ install_mybin(){
 	cp -rf mybin /usr/
 	cp $MV /usr/mybin/ -f > /dev/null 2>&1
 	cp $BA /usr/mybin/ -f > /dev/null 2>&1
-	grep "/usr/mybin" $HOME/.bashrc >/dev/null 2>&1
+	grep "#ADD BY JAN #" $HOME/.bashrc >/dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
+		echo '# ADD BY JAN #' >> $HOME/.bashrc
 		echo 'export PATH="/usr/mybin:$PATH"' >> $HOME/.bashrc
 		echo 'source /usr/mybin/.jump' >> $HOME/.bashrc
 		echo 'source /usr/share/autojump/autojump.sh' >> $HOME/.bashrc
 		echo 'alias sudo="sudo env PATH=$PATH"' >> $HOME/.bashrc
 		echo 'OTHER_WRITABLE 01;34' >> $HOME/.dir_colors
 		echo 'eval "$(dircolors -b $HOME/.dir_colors)"' >> $HOME/.bashrc
+		echo '# END #' >> $HOME/.bashrc
     fi
 
 	source $HOME/.bashrc
@@ -167,6 +169,8 @@ install_zsh(){
 	if [[ $? -ne 0 ]]; then
         return 1
     fi
+	
+	echo 'OTHER_WRITABLE 01;34' >> $HOME/.dir_colors
 
 	cd $ROOT_PATH/ohmyzsh/config && cp .zshrc ${HOME}/ && cp -rf .oh-my-zsh ${HOME}/
 	sed -i "s|`grep "export ZSH=" ${HOME}/.zshrc`| export ZSH="${HOME}/.oh-my-zsh"|g" ${HOME}/.zshrc
