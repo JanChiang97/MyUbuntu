@@ -22,7 +22,7 @@ check(){
 		exit 1
 	elif [[ $1 == '-h' || $1 == '--help' ]]; then
 		print_usage
-        exit 0
+		exit 0
 	fi
 }
 
@@ -35,9 +35,9 @@ set_vim(){
 		cp $ROOT_PATH/tools/.vim $HOME -rf
 	else
 		mv $HOME/.vimrc $HOME/.vimrc.bak
-        cp $ROOT_PATH/tools/.vimrc $HOME
-        mv $HOME/.vim $HOME/.vim.bak
-        cp $ROOT_PATH/tools/.vim $HOME -rf
+		cp $ROOT_PATH/tools/.vimrc $HOME
+		mv $HOME/.vim $HOME/.vim.bak
+		cp $ROOT_PATH/tools/.vim $HOME -rf
 
 	fi	
 	fi	
@@ -47,7 +47,7 @@ set_vim(){
 	if [[ $? -ne 0 ]]; then
 		echo "\" ADD_BY_JAN" >> /etc/vim/vimrc
 		echo "set ts=4" >> /etc/vim/vimrc
-		echo "set tabstop=8" >> /etc/vim/vimrc
+		echo "set tabstop=4" >> /etc/vim/vimrc
 		echo "set shiftwidth=4" >> /etc/vim/vimrc
 		echo "set softtabstop=4" >> /etc/vim/vimrc
 		echo "set expandtab" >> /etc/vim/vimrc
@@ -90,13 +90,13 @@ set_git(){
 }
 set_zsh(){
 	cd $ROOT_PATH
-    chsh -s /bin/zsh
+	chsh -s /bin/zsh
 	chown $CUR_USR:root $HOME/.local -R
 	chown $CUR_USR:root $HOME/.oh-my-zsh -R
 	#chown $CUR_USR:root $HOME/.zsh_history 
 	chown $CUR_USR:root $HOME/.zshrc
-    su $CUR_USR
-    chsh -s /bin/zsh
+	su $CUR_USR
+	chsh -s /bin/zsh
 }
 ####################################### target #################################################
 
@@ -104,8 +104,8 @@ install_environment(){
 	grep "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" /etc/apt/sources.list >/dev/null 2>&1
 
 	if [[ $? -ne 0 ]]; then
-    	echo "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" >> /etc/apt/sources.list
-    	apt update
+		echo "deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse" >> /etc/apt/sources.list
+		apt update
 	fi
 
 	apt install gitk ubuntu-make make amule bc build-essential curl flex g++-multilib gcc-multilib gnupg gperf rsync zip python git bison tofrodos dpkg-dev git-core unzip m4 samba
@@ -122,13 +122,13 @@ install_mybin(){
 
 	apt install autojump
 	if [[ $? -ne 0 ]]; then
-        return 1
-    fi
+ 		return 1
+	fi
 
 	apt install net-tools tree
 	if [[ $? -ne 0 ]]; then
-        return 1
-    fi
+		return 1
+	fi
 
 	MV=`which mv`
 	BA=`which bash`
@@ -163,12 +163,12 @@ install_zsh(){
 	apt install zsh
 	if [[ $? -ne 0 ]]; then
         return 1
-    fi
+	fi
 
 	apt install autojump
 	if [[ $? -ne 0 ]]; then
-        return 1
-    fi
+		return 1
+	fi
 	
 	echo 'OTHER_WRITABLE 01;34' >> $HOME/.dir_colors
 
@@ -190,12 +190,12 @@ install_theme(){
 	echo "===================================start install theme==============================="
 	apt install gnome-tweak-tool
 	if [[ $? -ne 0 ]]; then
-        return 1
-    fi
+		return 1
+	fi
 	apt install gnome-shell-extensions
 	if [[ $? -ne 0 ]]; then
-        return 1
-    fi
+		return 1
+	fi
 
 	cd $ROOT_PATH/package/vimix && tar -xvf vimix-gtk-themes-2020-02-24.tar.gz >/dev/null 2>&1 && tar -xvf $ROOT_PATH/package/vimix/vimix-icon-theme-2020-07-10.tar.gz >/dev/null 2>&1
 	cd $ROOT_PATH/package/vimix/vimix-gtk-themes-2020-02-24 && ./install.sh >/dev/null
@@ -221,16 +221,16 @@ if [[ $opt == "all" ]]; then
 	if [[ $? -ne 0 ]]; then
 		echo "failed:install bin"
 		exit 1
-    fi
+	fi
 	install_theme
 	if [[ $? -ne 0 ]]; then
 		echo "failed:install theme"
-        exit 1
-    fi
+		exit 1
+	fi
 	install_zsh
-    if [[ $? -ne 0 ]]; then
-        echo "failed:install zsh"
-        exit 1
+	if [[ $? -ne 0 ]]; then
+		echo "failed:install zsh"
+		exit 1
 	else
 		RET_ZSH=1
 	fi
@@ -241,31 +241,31 @@ for opt in $@
 do
 if [[ $ALL_FLAG -eq 0 ]]; then
 if [[ $opt == "zsh" ]]; then
-    install_zsh
+	install_zsh
 	if [[ $? -ne 0 ]]; then
-        echo "failed:install zsh"
-        #exit 1
+		echo "failed:install zsh"
+		#exit 1
 	else
 		RET_ZSH=1
 	fi
 elif [[ $opt == "bin" ]]; then
-    install_mybin
+	install_mybin
 	if [[ $? -ne 0 ]]; then
-        echo "failed:install bin"
-        #exit 1
-    fi
+		echo "failed:install bin"
+		#exit 1
+	fi
 elif [[ $opt == "theme" ]]; then
 	install_theme
 	if [[ $? -ne 0 ]]; then
-        echo "failed:install theme"
-        #exit 1
-    fi
+		echo "failed:install theme"
+		#exit 1
+	fi
 elif [[ $opt == "environment" ]]; then
-    install_environment
-    if [[ $? -ne 0 ]]; then
-        echo "failed:install environment"
-        #exit 1
-    fi
+	install_environment
+	if [[ $? -ne 0 ]]; then
+		echo "failed:install environment"
+		#exit 1
+	fi
 else
 	echo "ERROR: No such target $opt"
 	print_usage
