@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PWD=`pwd`
+ROOT=$HOME/.cscope
+
+
+if [[ ! -d $ROOT  ]]; then
+	mkdir -p $ROOT
+fi
+
+
+find $PWD -name "*.h" -o -name "*.c" -o -name "*.cpp" > $ROOT/cscope.files
+
+cscope -Rbkq -i $ROOT/cscope.files -f $ROOT/cscope.out
+
+ctags -Rf $ROOT/tags

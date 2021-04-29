@@ -135,7 +135,7 @@ install_mybin(){
 	cp -rf mybin /usr/
 	cp $MV /usr/mybin/ -f > /dev/null 2>&1
 	cp $BA /usr/mybin/ -f > /dev/null 2>&1
-	grep "#ADD BY JAN #" $HOME/.bashrc >/dev/null 2>&1
+	grep "# ADD BY JAN #" $HOME/.bashrc >/dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
 		echo '# ADD BY JAN #' >> $HOME/.bashrc
 		echo 'export PATH="/usr/mybin:$PATH"' >> $HOME/.bashrc

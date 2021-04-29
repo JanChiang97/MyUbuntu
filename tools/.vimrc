@@ -61,11 +61,11 @@ map <F4> :bn<CR>
 map <F5> :TlistToggle<CR>
 
 " 关闭当前缓冲区
-map <F6> :bd <CR>
+" map <F6> :bd <CR>
 
 " 转到定义 <cword> 是光标所在的单词
 " map <F7> :cs find c expand("<cword>") <CR>
-map <F7> :cs find c <cword> <CR>
+map <F6> :cs find c <cword> <CR>
 
 " Doxygen 一键生成文件注释
 " let g:DoxygenToolkit_companyName =""
@@ -96,7 +96,7 @@ set nocp	"关闭兼容模式 兼容模式默认以vi的配置启动
 set ic		"不区分大小写
 " set noic	"区分大小写
 " set cursorline	" 添加下划线
-" set mouse=nv	"cmd界面支持鼠标操作
+set mouse=nv	"cmd界面支持鼠标操作
 syntax on	" 设置语法高亮
 
 " let Tlist_Show_One_File=1	" 只显示当前文件的tags
@@ -139,8 +139,8 @@ if has("cscope")
         set cst
         set nocsverb
 	" add any database in current directory
-	if filereadable("cscope.out")
-		cs add cscope.out
+    if filereadable("~/.cscope/cscope.out")
+		cs add $HOME/.cscope/cscope.out
 	" else add database pointed to by environment
 	elseif $CSCOPE_DB != ""
 		cs add $CSCOPE_DB
