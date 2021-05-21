@@ -1,0 +1,28 @@
+#!/bin/bash
+
+
+
+if [[ -z $WD ]]; then 
+	export WD=$HOME
+fi
+
+print_usage(){
+	echo "Usage:"
+	echo "	-r:	use the current dir as the work root dir"
+	echo '	$1:	use the $1 as the work root dir'
+	echo -e "\r\n	enter work root dir"
+	
+}
+
+
+
+if [[ $1 == '-r' ]]; then
+	export WD=`pwd`
+elif [[ $1 == '-h' || $1 == '--help' ]]; then
+	print_usage
+elif [[ ! -z $1 ]];	then
+	export WD=$1
+else
+	cd $WD
+	echo $WD
+fi

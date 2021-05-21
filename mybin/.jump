@@ -95,6 +95,10 @@ function jclean(){
 	fi
 }
 
+function wd(){
+	source /usr/mybin/.wd
+}
+
 export CSCOPE_DB=$HOME/.cscope/cscope.out
 j --purge > /dev/null 2>&1
 jclean
@@ -104,3 +108,4 @@ jclean
 export  jump
 export  j
 export	jo
+export	wd
