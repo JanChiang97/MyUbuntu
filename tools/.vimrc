@@ -65,7 +65,12 @@ map <F5> :TlistToggle<CR>
 
 " 转到定义 <cword> 是光标所在的单词
 " map <F7> :cs find c expand("<cword>") <CR>
-map <F6> :cs find c <cword> <CR>
+" 查找函数调用
+map <F6> :cs find c <cword> <CR> 
+" 查找字符串、全匹配
+map <F7> :cs find t <cword> <CR>
+" 查找符号、非全匹配
+map <F8> :cs find s <cword> <CR>
 
 " Doxygen 一键生成文件注释
 " let g:DoxygenToolkit_companyName =""
