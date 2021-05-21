@@ -8,7 +8,7 @@ fi
 
 print_usage(){
 	echo "Usage:"
-	echo "	-r:	use the current dir as the work root dir"
+	echo "	-s:	use the current dir as the work root dir"
 	echo '	$1:	use the $1 as the work root dir'
 	echo -e "\r\n	enter work root dir"
 	
@@ -16,12 +16,14 @@ print_usage(){
 
 
 
-if [[ $1 == '-r' ]]; then
+if [[ $1 == '-s' ]]; then
 	export WD=`pwd`
+	echo "set $WD as work root dir at current shell"
 elif [[ $1 == '-h' || $1 == '--help' ]]; then
 	print_usage
 elif [[ ! -z $1 ]];	then
 	export WD=$1
+	echo "set $WD as work root dir at current shell"
 else
 	cd $WD
 	echo $WD
