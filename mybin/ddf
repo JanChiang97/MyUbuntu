@@ -1,4 +1,29 @@
 #!/bin/sh  
+
+usage_print(){
+	echo "Usage:"
+	echo "	-h		help"
+	echo "	-r		Restore files to out"
+	echo '	$1		name'
+	echo '	$2		size(M)'	
+	echo -e "\n	Split the file."
+}
+
+if [[ -z $1 || $1 == '-h' || $1 == '--help' ]];then 
+	usage_print
+	exit 
+elif [[ $1 == '-r' ]];then
+	cnt=`ls |wc -l`
+	i=1
+	while [[ $i -le $cnt ]]
+		do
+			cat *.d$i>> OUT
+			i=`expr $i + 1`
+		done
+	echo "$cnt files have been merged into the OUT file"
+	exit
+fi
+
 Filename=$1   
 Outfilename=`basename -a $Filename`
 Filesize=0    
@@ -13,19 +38,7 @@ fi
 
 Subfilesize=`expr $Size \* 1024`
 #验证文件名是否正确，然后计算文件的大小  
-
-usage_print(){
-	echo "Usage:"
-	echo "	-h		help"
-	echo '	$1		name'
-	echo '	$2		size(M)'	
-	echo -e "\n	Split the file."
-}
-
-if [[ -z $Filename || $1 == '-h' || $1 == '--help' ]];then 
-	usage_print
-	exit 
-fi 
+ 
 if [ -e $Filename ];then 
    Filesize=`du -b $Filename | awk '{print $1}'` 
      if [ $Filesize == 0 ];then 
@@ -52,7 +65,7 @@ skipnum=0
 mkdir -p $Path/$Dir
 while [ $i -le $Subfilenum ]
     do
-      echo "$Outfilename$i.img"
+      echo "$Outfilename$i.d$i"
       dd if=$Filename of="$Path/$Dir/$Outfilename.d$i" bs=1024 count=$Subfilesize skip=$skipnum
       i=`expr $i + 1`
       skipnum=`expr $skipnum + $Subfilesize`

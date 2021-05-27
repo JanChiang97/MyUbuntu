@@ -176,4 +176,4 @@ check(){
 check $@
 mydel $@
 
-du -m --max-depth=0 $TRASHCAN | tr -d "	$TRASHCAN" > $SIZEFILE 2>/dev/null &
+du -m --max-depth=0 $TRASHCAN 2>/dev/null | tr -d "	$TRASHCAN" > $SIZEFILE 2>/dev/null &
