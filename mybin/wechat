@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo docker stop wechat
+sudo docker start wechat
+
