@@ -1,15 +1,30 @@
 #!/bin/sh  
 Filename=$1   
-Outfilename=`basename $Filename .img`
+Outfilename=`basename -a $Filename`
 Filesize=0    
 Path=`pwd`
-Size=1024 #单位MB
+Dir=$Filename.Dir
+
+if [[ -z $2 ]];then
+	Size=1024 #单位MB
+else
+	Size=$2
+fi
+
 Subfilesize=`expr $Size \* 1024`
 #验证文件名是否正确，然后计算文件的大小  
 
-if [ -z $Filename ];then 
-   echo "Error:The file name can not be empty" 
-   exit 
+usage_print(){
+	echo "Usage:"
+	echo "	-h		help"
+	echo '	$1		name'
+	echo '	$2		size(M)'	
+	echo -e "\n	Split the file."
+}
+
+if [[ -z $Filename || $1 == '-h' || $1 == '--help' ]];then 
+	usage_print
+	exit 
 fi 
 if [ -e $Filename ];then 
    Filesize=`du -b $Filename | awk '{print $1}'` 
@@ -34,10 +49,11 @@ fi
 echo "$Filename will be divided into $Subfilenum" 
 i=1
 skipnum=0
+mkdir -p $Path/$Dir
 while [ $i -le $Subfilenum ]
     do
       echo "$Outfilename$i.img"
-      dd if=$Filename of="$Path/$Outfilename$i.img" bs=1024 count=$Subfilesize skip=$skipnum
+      dd if=$Filename of="$Path/$Dir/$Outfilename.d$i" bs=1024 count=$Subfilesize skip=$skipnum
       i=`expr $i + 1`
       skipnum=`expr $skipnum + $Subfilesize`
     done
