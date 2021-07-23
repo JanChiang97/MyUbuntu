@@ -71,7 +71,7 @@ set_git(){
 	git config --global core.editor "vim"
 
 	
-	grep "[commit]" $HOME/.gitconfig >/dev/null 2>&1
+	grep "\[commit\]" $HOME/.gitconfig >/dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
 		git config --global commit.template $HOME/.git-commit-template.txt
 		touch $HOME/.git-commit-template.txt
