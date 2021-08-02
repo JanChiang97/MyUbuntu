@@ -12,7 +12,9 @@ void usage( void )
 void print( long int addr, unsigned int cnt )
 {
     printf( "Reading %d count starting at addres 0x%.8lx\n\n", cnt, addr );
-    printf( "0x%.8lx: 0x%.8x 0x%.8x 0x%.8x 0x%.8x\r\n", addr, ( ( int * )( addr ) )[0], ( ( int * )( addr ) )[1], ( ( int * )( addr ) )[2], ( ( int * )( addr ) )[3] );
+    printf( "0x%.8lx: 0x%.8x 0x%.8x 0x%.8x 0x%.8x\r\n", addr,
+            ( ( int * )( addr ) )[0], ( ( int * )( addr ) )[1], ( ( int * )( addr ) )[2],
+            ( ( int * )( addr ) )[3] );
 }
 
 int main( int argc, char **argv )
@@ -20,8 +22,7 @@ int main( int argc, char **argv )
     unsigned int cnt;
     long int addr;
 
-    if ( argc != 3 )
-    {
+    if ( argc != 3 ) {
         usage();
         return 1;
     }

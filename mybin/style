@@ -2,7 +2,7 @@
 
 PWD=$(pwd)
 
-astyle --mode=c --style=bsd --indent=spaces=4 --convert-tabs --pad-oper --pad-header --break-blocks  --indent-switches  -w -S -p -D -m0  -M40 --lineend=linux --indent-switches --indent-col1-comments --pad-paren-in --unpad-paren --delete-empty-lines  --align-pointer=name --add-brackets $@
+astyle --mode=c --style=linux --indent=spaces=4 --convert-tabs --pad-oper --pad-header --break-blocks  --indent-switches  -w -S -p -D -m0  -M40 --lineend=linux --indent-switches --indent-col1-comments --pad-paren-in --unpad-paren --delete-empty-lines  --align-pointer=name --add-brackets --max-code-length=80 --break-after-logical $@
 
 for file in $@
 do

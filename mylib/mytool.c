@@ -7,26 +7,22 @@ int do_cmd( const char *cmd, char *tmp )
     FILE *fp;
     int ret = 0;
 
-    if ( ( cmd == NULL ) || ( strlen( cmd ) < 1 ) )
-    {
+    if ( ( cmd == NULL ) || ( strlen( cmd ) < 1 ) ) {
         printf( "cmd:[%s] err!\n", cmd );
         return ERR;
     }
 
     fp = popen( cmd, "r" );
 
-    if ( NULL == fp )
-    {
+    if ( NULL == fp ) {
         perror( "popen do err\n" );
         return ERR;
     }
 
-    if ( tmp )
-    {
+    if ( tmp ) {
         ret = fread( tmp, 1, BUFFSIZE, fp );
 
-        if ( 0 > ret )
-        {
+        if ( 0 > ret ) {
             pclose( fp );
             perror( "popen read\n" );
             return ERR;
@@ -35,8 +31,7 @@ int do_cmd( const char *cmd, char *tmp )
 
     ret = pclose( fp );
 
-    if ( -1 == ret )
-    {
+    if ( -1 == ret ) {
         perror( "popen close\n" );
         return ERR;
     }
